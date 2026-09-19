@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Chủ - Cửa Hàng Minxi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --pastel-blue-bg: #eef5ff;
+            --pastel-blue-primary: #4a90e2;
+            --pastel-pink-primary: #f8a5c2;
+            --pastel-pink-hover: #f78fb3;
+            --pastel-card-bg: #ffffff;
+            --text-dark: #334155;
+        }
+
+        body {
+            background-color: var(--pastel-blue-bg) !important;
+            color: var(--text-dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* NAVBAR PASTEL */
+        .navbar-pastel {
+            background: linear-gradient(135deg, #4a90e2 0%, #f8a5c2 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* BUTTONS */
+        .btn-pastel-pink {
+            background-color: var(--pastel-pink-primary);
+            color: #ffffff;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-pastel-pink:hover {
+            background-color: var(--pastel-pink-hover);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-pastel-blue {
+            border: 2px solid var(--pastel-blue-primary);
+            color: var(--pastel-blue-primary);
+            font-weight: 600;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-pastel-blue:hover {
+            background-color: var(--pastel-blue-primary);
+            color: #ffffff;
+        }
+
+        /* CARDS & SHADOWS */
+        .card-pastel {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.08);
+            background-color: var(--pastel-card-bg);
+        }
+
+        /* BADGES */
+        .badge-pink {
+            background-color: #ffeaa7;
+            color: #d63031;
+        }
+        .badge-pastel-cat {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 12px;
+        }
+
+        /* TABLE CUSTOMIZATION */
+        .table thead {
+            background-color: #f0f7ff;
+            color: var(--pastel-blue-primary);
+        }
+        .table-hover tbody tr:hover {
+            background-color: #fbf0f5;
+        }
+
+        /* PAGINATION */
+        .pagination .page-item.active .page-link {
+            background-color: var(--pastel-pink-primary);
+            border-color: var(--pastel-pink-primary);
+        }
+        .pagination .page-link {
+            color: var(--pastel-blue-primary);
+            border-radius: 8px;
+            margin: 0 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-pastel mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-white fs-4" href="/"><i class="fa-solid fa-store me-2"></i>MINXI STORE</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white fw-semibold me-3" href="/admin/categories"><i class="fa-solid fa-list-check me-1"></i> Quản lý Category</a>
+                <a class="nav-link text-white fw-semibold" href="/admin/products"><i class="fa-solid fa-box-open me-1"></i> Quản lý Product</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <!-- BỘ LỌC VÀ TÌM KIẾM -->
+        <div class="card card-pastel p-4 mb-4">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0" style="border-radius: 12px 0 0 12px;"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                        <input type="text" id="searchKeyword" class="form-control border-start-0" placeholder="Tìm kiếm sản phẩm...">
+                        <button class="btn btn-pastel-pink" style="border-radius: 0 12px 12px 0;" onclick="triggerSearch(0)">Tìm kiếm</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select id="categoryFilter" class="form-select border-0 bg-light" style="border-radius: 12px; height: 45px;" onchange="filterByCategory()">
+                        <option value="">-- Tất cả Danh mục --</option>
+                    </select>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <button class="btn btn-outline-pastel-blue py-2 px-3" style="border-radius: 12px;" onclick="loadSortedProducts()">
+                        <i class="fa-solid fa-arrow-down-short-wide me-1"></i> Lấy theo Giá
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- BẢNG DANH SÁCH PRODUCT -->
+        <div class="card card-pastel overflow-hidden">
+            <div class="card-header bg-white py-3 border-0">
+                <h5 class="card-title fw-bold text-primary mb-0" id="listTitle"><i class="fa-solid fa-boxes-stacked me-2"></i>Danh sách Sản Phẩm</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-center py-3" style="width: 80px;">ID</th>
+                                <th class="py-3" style="width: 100px;">Ảnh</th>
+                                <th class="py-3">Tên sản phẩm</th>
+                                <th class="py-3">Danh mục</th>
+                                <th class="py-3">Giá bán</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productContainer">
+                            <!-- Render bằng AJAX -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- PHÂN TRANG -->
+            <div class="card-footer bg-white py-3 border-0" id="paginationWrapper" style="display: none;">
+                <nav>
+                    <ul class="pagination justify-content-center mb-0" id="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let currentPage = 0;
+    const pageSize = 5;
+
+    $(document).ready(function() {
+        loadCategoriesDropdown();
+        loadSortedProducts(); 
+    });
+
+    // 1. LẤY SẢN PHẨM SẮP XẾP TỪ THẤP ĐẾN CAO
+    function loadSortedProducts() {
+        $('#listTitle').html('<i class="fa-solid fa-arrow-down-short-wide me-2 text-primary"></i>Sản Phẩm Xếp Theo Giá');
+        $('#paginationWrapper').hide();
+        $('#searchKeyword').val('');
+        $('#categoryFilter').val('');
+
+        let query = `{
+            getProductsSortedByPrice {
+                id name price images
+                category { name images }
+            }
+        }`;
+
+        $.ajax({
+            url: '/graphql',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ query: query }),
+            success: function(res) {
+                renderTable(res.data.getProductsSortedByPrice);
+            }
+        });
+    }
+
+    // 2. LẤY SẢN PHẨM THEO TỪNG CATEGORY
+    function filterByCategory() {
+        let catId = $('#categoryFilter').val();
+        if (!catId) {
+            loadSortedProducts();
+            return;
+        }
+
+        $('#listTitle').html('<i class="fa-solid fa-filter me-2 text-primary"></i>Sản Phẩm Theo Danh Mục');
+        $('#paginationWrapper').hide();
+
+        let query = `{
+            getProductsByCategory(categoryId: ${catId}) {
+                id name price images
+                category { name images }
+            }
+        }`;
+
+        $.ajax({
+            url: '/graphql',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ query: query }),
+            success: function(res) {
+                renderTable(res.data.getProductsByCategory);
+            }
+        });
+    }
+
+    // 3. TÌM KIẾM CÓ PHÂN TRANG
+    function triggerSearch(page) {
+        currentPage = page;
+        let keyword = $('#searchKeyword').val();
+        $('#categoryFilter').val('');
+        $('#listTitle').html(`<i class="fa-solid fa-magnifying-glass me-2 text-primary"></i>Kết quả tìm kiếm cho: "${keyword}"`);
+
+        let query = `{
+            searchProducts(keyword: "${keyword}", page: ${currentPage}, size: ${pageSize}) {
+                content { id name price images category { name images } }
+                totalPages pageNumber
+            }
+        }`;
+
+        $.ajax({
+            url: '/graphql',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ query: query }),
+            success: function(res) {
+                let data = res.data.searchProducts;
+                renderTable(data.content);
+                renderPagination(data.totalPages, data.pageNumber);
+            }
+        });
+    }
+
+    // RENDER BẢNG DỮ LIỆU
+    function renderTable(list) {
+        let html = '';
+        if (!list || list.length === 0) {
+            html = `<tr><td colspan="5" class="text-center py-4 text-muted">Không tìm thấy sản phẩm nào</td></tr>`;
+        } else {
+            $.each(list, function(i, p) {
+                let img = p.images ? `<img src="${p.images}" class="rounded-3 shadow-sm" width="55" height="55" style="object-fit:cover;">` : `<span class="badge bg-secondary">No img</span>`;
+                let catName = p.category ? `<span class="badge badge-pastel-cat">${p.category.name}</span>` : `<span class="badge bg-light text-dark">N/A</span>`;
+                html += `<tr>
+                    <td class="text-center fw-bold text-muted">${p.id}</td>
+                    <td>${img}</td>
+                    <td class="fw-bold text-dark">${p.name}</td>
+                    <td>${catName}</td>
+                    <td class="fw-bold" style="color: #e84393;">${p.price.toLocaleString()} VNĐ</td>
+                </tr>`;
+            });
+        }
+        $('#productContainer').html(html);
+    }
+
+    // RENDER PHÂN TRANG
+    function renderPagination(totalPages, pageNum) {
+        if (totalPages <= 1) {
+            $('#paginationWrapper').hide();
+            return;
+        }
+        $('#paginationWrapper').show();
+        let html = '';
+        for (let i = 0; i < totalPages; i++) {
+            let active = (i === pageNum) ? 'active' : '';
+            html += `<li class="page-item ${active}"><a class="page-link shadow-sm" href="#" onclick="triggerSearch(${i})">${i + 1}</a></li>`;
+        }
+        $('#pagination').html(html);
+    }
+
+    // NAP CATEGORY DOWNDOWN
+    function loadCategoriesDropdown() {
+        let query = `{ searchCategories(keyword: "", page: 0, size: 100) { content { id name } } }`;
+        $.ajax({
+            url: '/graphql',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ query: query }),
+            success: function(res) {
+                let cats = res.data.searchCategories.content;
+                let options = '<option value="">-- Tất cả Danh mục --</option>';
+                $.each(cats, function(i, c) {
+                    options += `<option value="${c.id}">${c.name}</option>`;
+                });
+                $('#categoryFilter').html(options);
+            }
+        });
+    }
+    </script>
+</body>
+</html>
