@@ -36,7 +36,7 @@ input ProductInput {
     categoryId: ID!
 }
 
-# 1. Các lệnh TRUY VẤN (GET)
+# 1.TRUY VẤN (GET)
 type Query {
     getProductsSortedByPrice: [Product]
     getProductsByCategory(categoryId: ID!): [Product]
@@ -44,7 +44,7 @@ type Query {
     searchCategories(keyword: String, page: Int, size: Int): CategoryPage
 }
 
-# 2. Các lệnh THAY ĐỔI DỮ LIỆU (POST/PUT/DELETE)
+# 2.THAY ĐỔI DỮ LIỆU (POST/PUT/DELETE)
 type Mutation {
     # CRUD Category
     createCategory(name: String!, images: String): Category

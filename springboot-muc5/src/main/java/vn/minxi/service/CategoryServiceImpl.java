@@ -32,7 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public Category createCategory(String name, String images) {
 		Category category = new Category();
 		category.setName(name);
-		category.setImages(images); // Thêm lưu đường dẫn/tên file ảnh của Category
+		category.setImages(images); 
 		return categoryRepository.save(category);
 	}
 
@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public Category updateCategory(Long id, String name, String images) {
 		Category category = getCategoryById(id);
 		category.setName(name);
-		category.setImages(images); // Cập nhật ảnh của Category
+		category.setImages(images); 
 		return categoryRepository.save(category);
 	}
 

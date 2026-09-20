@@ -50,7 +50,6 @@ public class ProductServiceImpl implements ProductService {
 		product.setName(input.getName());
 		product.setPrice(input.getPrice());
 
-		// Gán giá trị đường dẫn/dữ liệu ảnh từ input
 		product.setImages(input.getImages());
 
 		if (input.getCategoryId() != null) {

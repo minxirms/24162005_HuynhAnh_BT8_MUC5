@@ -32,7 +32,7 @@ public class GraphQLController {
 		private Long categoryId;
 	}
 
-	// ==================== QUERIES ====================
+	//QUERIES
 	@QueryMapping
 	public List<Product> getProductsSortedByPrice() {
 		return productService.getProductsSortedByPrice();
@@ -53,7 +53,7 @@ public class GraphQLController {
 		return categoryService.searchCategories(keyword, page, size);
 	}
 
-	// ==================== MUTATIONS CATEGORY ====================
+	//MUTATIONS CATEGORY
 	@MutationMapping
 	public Category createCategory(@Argument String name, @Argument String images) {
 		return categoryService.createCategory(name, images);
@@ -69,7 +69,7 @@ public class GraphQLController {
 		return categoryService.deleteCategory(id);
 	}
 
-	// ==================== MUTATIONS PRODUCT ====================
+	//MUTATIONS PRODUCT
 	@MutationMapping
 	public Product createProduct(@Argument ProductInput input) {
 		return productService.createProduct(input);
